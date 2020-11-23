@@ -9,21 +9,33 @@
 /* Begin PBXBuildFile section */
 		808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0E925666E7500C3A6AC /* AppDelegate.swift */; };
 		808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */; };
-		808FD0EE25666E7500C3A6AC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0ED25666E7500C3A6AC /* ViewController.swift */; };
-		808FD0F125666E7500C3A6AC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 808FD0EF25666E7500C3A6AC /* Main.storyboard */; };
+		808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0ED25666E7500C3A6AC /* HomeController.swift */; };
 		808FD0F325666E7700C3A6AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 808FD0F225666E7700C3A6AC /* Assets.xcassets */; };
 		808FD0F625666E7700C3A6AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 808FD0F425666E7700C3A6AC /* LaunchScreen.storyboard */; };
+		808FD10A256675B200C3A6AC /* Extensions+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD109256675B200C3A6AC /* Extensions+UIView.swift */; };
+		808FD110256684F600C3A6AC /* HomeBottomControlsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD10D256684F600C3A6AC /* HomeBottomControlsStackView.swift */; };
+		808FD111256684F600C3A6AC /* TopNavigationStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD10E256684F600C3A6AC /* TopNavigationStackView.swift */; };
+		808FD112256684F600C3A6AC /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD10F256684F600C3A6AC /* CardView.swift */; };
+		808FD1162566879200C3A6AC /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1142566879200C3A6AC /* Advertiser.swift */; };
+		808FD1172566879200C3A6AC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1152566879200C3A6AC /* User.swift */; };
+		808FD11B2566884300C3A6AC /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD11A2566884300C3A6AC /* CardViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		808FD0E625666E7500C3A6AC /* TinderCloneFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderCloneFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		808FD0E925666E7500C3A6AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		808FD0ED25666E7500C3A6AC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		808FD0F025666E7500C3A6AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		808FD0ED25666E7500C3A6AC /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		808FD0F225666E7700C3A6AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		808FD0F525666E7700C3A6AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		808FD0F725666E7700C3A6AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		808FD109256675B200C3A6AC /* Extensions+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+UIView.swift"; sourceTree = "<group>"; };
+		808FD10D256684F600C3A6AC /* HomeBottomControlsStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeBottomControlsStackView.swift; sourceTree = "<group>"; };
+		808FD10E256684F600C3A6AC /* TopNavigationStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopNavigationStackView.swift; sourceTree = "<group>"; };
+		808FD10F256684F600C3A6AC /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		808FD1142566879200C3A6AC /* Advertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
+		808FD1152566879200C3A6AC /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		808FD11A2566884300C3A6AC /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +70,59 @@
 			children = (
 				808FD0E925666E7500C3A6AC /* AppDelegate.swift */,
 				808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */,
-				808FD0ED25666E7500C3A6AC /* ViewController.swift */,
-				808FD0EF25666E7500C3A6AC /* Main.storyboard */,
+				808FD105256674F600C3A6AC /* Views */,
+				808FD104256674EF00C3A6AC /* Controllers */,
+				808FD1082566752500C3A6AC /* Extension */,
+				808FD1072566750E00C3A6AC /* View Model */,
+				808FD106256674FD00C3A6AC /* Model */,
 				808FD0F225666E7700C3A6AC /* Assets.xcassets */,
 				808FD0F425666E7700C3A6AC /* LaunchScreen.storyboard */,
 				808FD0F725666E7700C3A6AC /* Info.plist */,
 			);
 			path = TinderCloneFirestore;
+			sourceTree = "<group>";
+		};
+		808FD104256674EF00C3A6AC /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				808FD0ED25666E7500C3A6AC /* HomeController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		808FD105256674F600C3A6AC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				808FD10F256684F600C3A6AC /* CardView.swift */,
+				808FD10D256684F600C3A6AC /* HomeBottomControlsStackView.swift */,
+				808FD10E256684F600C3A6AC /* TopNavigationStackView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		808FD106256674FD00C3A6AC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				808FD1142566879200C3A6AC /* Advertiser.swift */,
+				808FD1152566879200C3A6AC /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		808FD1072566750E00C3A6AC /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				808FD11A2566884300C3A6AC /* CardViewModel.swift */,
+			);
+			path = "View Model";
+			sourceTree = "<group>";
+		};
+		808FD1082566752500C3A6AC /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				808FD109256675B200C3A6AC /* Extensions+UIView.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,7 +184,6 @@
 			files = (
 				808FD0F625666E7700C3A6AC /* LaunchScreen.storyboard in Resources */,
 				808FD0F325666E7700C3A6AC /* Assets.xcassets in Resources */,
-				808FD0F125666E7500C3A6AC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +194,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				808FD0EE25666E7500C3A6AC /* ViewController.swift in Sources */,
+				808FD112256684F600C3A6AC /* CardView.swift in Sources */,
+				808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */,
 				808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */,
+				808FD110256684F600C3A6AC /* HomeBottomControlsStackView.swift in Sources */,
+				808FD11B2566884300C3A6AC /* CardViewModel.swift in Sources */,
+				808FD1162566879200C3A6AC /* Advertiser.swift in Sources */,
+				808FD1172566879200C3A6AC /* User.swift in Sources */,
+				808FD111256684F600C3A6AC /* TopNavigationStackView.swift in Sources */,
+				808FD10A256675B200C3A6AC /* Extensions+UIView.swift in Sources */,
 				808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,14 +210,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		808FD0EF25666E7500C3A6AC /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				808FD0F025666E7500C3A6AC /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		808FD0F425666E7700C3A6AC /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
