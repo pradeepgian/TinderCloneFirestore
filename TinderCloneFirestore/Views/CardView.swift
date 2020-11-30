@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CardView: UIView {
 
@@ -13,14 +14,39 @@ class CardView: UIView {
     // All the styling related code of the views (like labels, images) will be inside viewmodel
     var cardViewModel: CardViewModel! {
         didSet {
-            imageView.image = UIImage(named: cardViewModel.imageName)
+            //Show the first element present in image names array
+            //This method is called when home screen loads for first time
+            //Accessing index 0 will crash if imageNames.count == 0
+            let imageName = cardViewModel.imageNames.first ?? ""
+            imageView.image = UIImage(named: imageName)
+//            if let url = URL(string: imageName) {
+//                imageView.sd_setImage(with: url)
+//            }
             informationLabel.attributedText = cardViewModel.attributedString
             informationLabel.textAlignment = cardViewModel.textAlignment
+
+            //add bars - UIView() on barStackView based on the number of images present in an array
+            (0..<cardViewModel.imageNames.count).forEach { (_) in
+                let barView = UIView()
+                barView.backgroundColor = barDeselectedColor
+                barsStackView.addArrangedSubview(barView)
+            }
+            
+            barsStackView.arrangedSubviews.first?.backgroundColor = .white
+            
+            setupImageIndexObserver()
         }
     }
     
+    // MARK:- Encapsulation
+    
+    fileprivate let barDeselectedColor = UIColor(white: 0, alpha: 0.1)
+    fileprivate let barsStackView = UIStackView()
     fileprivate let imageView = UIImageView(image: #imageLiteral(resourceName: "pc1"))
     fileprivate let gradientLayer = CAGradientLayer()
+    
+    // MARK:- Configurations
+    fileprivate let threshold: CGFloat = 100
     
     //Here we implement the getter method to create Information Label
     fileprivate let informationLabel: UILabel = {
@@ -30,8 +56,18 @@ class CardView: UIView {
         return label
     }()
     
-    // MARK:- Configurations
-    fileprivate let threshold: CGFloat = 100
+    fileprivate func setupImageIndexObserver() {
+        cardViewModel.imageIndexObserver = { [weak self] (index, imageUrl) in
+//            if let url = URL(string: imageUrl ?? "") {
+//                self?.imageView.sd_setImage(with: url)
+//            }
+            
+            self?.barsStackView.arrangedSubviews.forEach { (v) in
+                v.backgroundColor = self?.barDeselectedColor
+            }
+            self?.barsStackView.arrangedSubviews[index].backgroundColor = .white
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,6 +79,7 @@ class CardView: UIView {
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addGestureRecognizer(panGesture)
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
     
     required init?(coder: NSCoder) {
@@ -67,12 +104,23 @@ class CardView: UIView {
         //Entire Card View will be filled with image
         imageView.fillSuperview()
         
+        //We set up barstackview after the image is added
+        //Barstackview is at higher z-index. Hence, it is visible
+        setupBarsStackView()
         setupGradientLayer()
         
         // Add information label and set its position by setting bottom, left and right anchor to 0 with respect to imageview
         // Add padding to information label by setting edge insets to 16 on left, bottom and right
         addSubview(informationLabel)
         informationLabel.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16))
+    }
+
+    fileprivate func setupBarsStackView() {
+        barsStackView.spacing = 4
+        barsStackView.distribution = .fillEqually
+        
+        addSubview(barsStackView)
+        barsStackView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: 8), size: .init(width: 0, height: 4))
     }
     
     fileprivate func setupGradientLayer() {
@@ -141,4 +189,14 @@ class CardView: UIView {
         }
     }
     
+    @objc fileprivate func handleTap(gesture: UITapGestureRecognizer) {
+        let tapLocation = gesture.location(in: nil)
+        let shouldAdvanceNextPhoto = tapLocation.x > frame.width / 2 ? true : false
+        
+        if shouldAdvanceNextPhoto {
+            cardViewModel.advanceToNextPhoto()
+        } else {
+            cardViewModel.goToPreviousPhoto()
+        }
+    }
 }

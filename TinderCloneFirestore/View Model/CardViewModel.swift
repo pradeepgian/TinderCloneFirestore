@@ -13,14 +13,37 @@ protocol ProducesCardViewModel {
 
 class CardViewModel {
     
-    let imageName: String
+    let imageNames: [String]
     let attributedString: NSAttributedString
     let textAlignment: NSTextAlignment
     
-    init(imageName: String, attributedString: NSAttributedString, textAlignment: NSTextAlignment) {
-        self.imageName = imageName
+    init(imageNames: [String], attributedString: NSAttributedString, textAlignment: NSTextAlignment) {
+        self.imageNames = imageNames
         self.attributedString = attributedString
         self.textAlignment = textAlignment
+    }
+    
+    //whenever we modify the image index, we can fire imageIndexObserver
+    fileprivate var imageIndex = 0 {
+        didSet {
+            let imageUrl = imageNames[imageIndex]
+//            let image = UIImage(named: imageName)
+            imageIndexObserver?(imageIndex, imageUrl)
+        }
+    }
+    
+    // Reactive Programming
+    // Here you expose the property on View Model Object
+    // such that you can notify an external class - here CardView
+    // Here you will notify the index change of images
+    var imageIndexObserver: ((Int, String?) -> ())?
+    
+    func advanceToNextPhoto() {
+        imageIndex = min(imageIndex + 1, imageNames.count - 1)
+    }
+    
+    func goToPreviousPhoto() {
+        imageIndex = max(0, imageIndex - 1)
     }
     
 }
