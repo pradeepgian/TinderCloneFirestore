@@ -8,8 +8,14 @@ target 'TinderCloneFirestore' do
   # Pods for TinderCloneFirestore
 
 # add the Firebase pod for Google Analytics
-pod 'Firebase/Analytics'
+pod 'Firebase/Auth'
+pod 'Firebase/Core'
+pod 'Firebase/Firestore'
+pod 'Firebase/Storage'
+pod 'FirebaseFirestoreSwift'
 pod 'SDWebImage', '~> 5.0'
+pod 'JGProgressHUD'
+
 # add pods for any other desired Firebase products
 # https://firebase.google.com/docs/ios/setup#available-pods
 
