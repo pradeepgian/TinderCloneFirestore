@@ -6,35 +6,33 @@
 //
 
 import UIKit
+import Firebase
+import JGProgressHUD
 
 class HomeController: UIViewController {
     
-    let cardViewModels: [CardViewModel] = {
-        let producers = [
-        User(name: "Corsair", age: 2, profession: "Gaming PC", imageNames: ["pc1", "2080ti", "2080ti"]),
-        User(name: "Main Gear", age: 1, profession: "Editing PC", imageNames: ["maingearPC", "pc1", "2080ti"]),
-        Advertiser(title: "GTX 2080Ti", brandName: "Nvidia", posterPhotos: ["2080ti"])
-        ] as [ProducesCardViewModel]
-        
-        let viewModels = producers.map({return $0.toCardViewModel()})
-        return viewModels
-    }()
-    
+    var cardViewModels = [CardViewModel]()
     let topStackView = TopNavigationStackView()
     let cardsDeckView = UIView()
-    let buttonStackView = HomeBottomControlsStackView()
+    let bottomControlsStackView = HomeBottomControlsStackView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        topStackView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        bottomControlsStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
+        
         setupLayout()
-        setupDummyCards()
+        setupFirestoreUserCards()
+        fetchUsersFromFirestore()
     }
 
     // MARK:- Fileprivate
     fileprivate func setupLayout() {
+        view.backgroundColor = .white
+
         //add topview, middle view and bottom view in vertical stack
-        let overallStackview = UIStackView(arrangedSubviews: [topStackView, cardsDeckView, buttonStackView])
+        let overallStackview = UIStackView(arrangedSubviews: [topStackView, cardsDeckView, bottomControlsStackView])
         overallStackview.axis = .vertical
         view.addSubview(overallStackview)
         
@@ -51,7 +49,7 @@ class HomeController: UIViewController {
         overallStackview.bringSubviewToFront(cardsDeckView)
     }
     
-    fileprivate func setupDummyCards() {
+    fileprivate func setupFirestoreUserCards() {
         cardViewModels.forEach { (cardViewModel) in
             let cardView = CardView()
             cardView.cardViewModel = cardViewModel
@@ -59,6 +57,64 @@ class HomeController: UIViewController {
             cardsDeckView.addSubview(cardView)
             cardView.fillSuperview()
         }
+    }
+
+    @objc func handleSettings() {
+        print("Show registration page")
+        let registrationController = RegistrationController()
+        registrationController.modalPresentationStyle = .fullScreen
+        present(registrationController, animated: true)
+    }
+    
+    var lastFetchedUser: User?
+    
+    fileprivate func fetchUsersFromFirestore() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Fetching Users"
+        hud.show(in: view)
+        
+        // This query will call the collection of user and you will get documents
+        // Firestore provides a query functionality for specifying which documents you want to retrieve from a collection or collection group
+        // Check below link for more details
+        // https://firebase.google.com/docs/firestore/query-data/queries
+        //This query introduces pagination to page through 2 users at a time
+        //Here we set the last fetched user while fetching all documents
+        //lastFetchedUser is passed while hitting pagination query
+        let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
+        query.getDocuments { (snapshot, error) in
+            hud.dismiss()
+            
+            if let error = error {
+                print("Failed to fetch users:", error)
+                return
+            }
+            
+            //On snapshot object, you will be able to access all the documents
+            snapshot?.documents.forEach({ (documentSnapshot) in
+                let userDictionary = documentSnapshot.data()
+                let user = User(dictionary: userDictionary)
+                self.cardViewModels.append(user.toCardViewModel())
+                self.lastFetchedUser = user
+                self.setupCardFromUser(user: user)
+            })
+        }
+    }
+    
+    fileprivate func setupCardFromUser(user: User) {
+        let cardView = CardView()
+        cardView.cardViewModel = user.toCardViewModel()
+        cardsDeckView.addSubview(cardView)
+        //here we will get to see bit of a flashing when card views are added on deck view
+        //hence reduce the z-index of recently added card
+        cardsDeckView.sendSubviewToBack(cardView)
+        cardView.fillSuperview()
+    }
+    
+    @objc fileprivate func handleRefresh() {
+        cardsDeckView.subviews.forEach({ (view) in
+            view.layer.removeAllAnimations()
+        })
+        fetchUsersFromFirestore()
     }
 
 }

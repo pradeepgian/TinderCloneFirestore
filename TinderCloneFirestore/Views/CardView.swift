@@ -18,10 +18,10 @@ class CardView: UIView {
             //This method is called when home screen loads for first time
             //Accessing index 0 will crash if imageNames.count == 0
             let imageName = cardViewModel.imageNames.first ?? ""
-            imageView.image = UIImage(named: imageName)
-//            if let url = URL(string: imageName) {
-//                imageView.sd_setImage(with: url)
-//            }
+            
+            if let url = URL(string: imageName) {
+                imageView.sd_setImage(with: url)
+            }
             informationLabel.attributedText = cardViewModel.attributedString
             informationLabel.textAlignment = cardViewModel.textAlignment
 
@@ -39,14 +39,26 @@ class CardView: UIView {
     }
     
     // MARK:- Encapsulation
+
+    fileprivate func setupImageIndexObserver() {
+        cardViewModel.imageIndexObserver = { [weak self] (index, imageUrl) in
+            if let url = URL(string: imageUrl ?? "") {
+                self?.imageView.sd_setImage(with: url)
+            }
+            
+            self?.barsStackView.arrangedSubviews.forEach { (v) in
+                v.backgroundColor = self?.barDeselectedColor
+            }
+            self?.barsStackView.arrangedSubviews[index].backgroundColor = .white
+        }
+    }
     
     fileprivate let barDeselectedColor = UIColor(white: 0, alpha: 0.1)
     fileprivate let barsStackView = UIStackView()
     fileprivate let imageView = UIImageView(image: #imageLiteral(resourceName: "pc1"))
     fileprivate let gradientLayer = CAGradientLayer()
     
-    // MARK:- Configurations
-    fileprivate let threshold: CGFloat = 100
+    
     
     //Here we implement the getter method to create Information Label
     fileprivate let informationLabel: UILabel = {
@@ -56,18 +68,9 @@ class CardView: UIView {
         return label
     }()
     
-    fileprivate func setupImageIndexObserver() {
-        cardViewModel.imageIndexObserver = { [weak self] (index, imageUrl) in
-//            if let url = URL(string: imageUrl ?? "") {
-//                self?.imageView.sd_setImage(with: url)
-//            }
-            
-            self?.barsStackView.arrangedSubviews.forEach { (v) in
-                v.backgroundColor = self?.barDeselectedColor
-            }
-            self?.barsStackView.arrangedSubviews[index].backgroundColor = .white
-        }
-    }
+    // MARK:- Configurations
+    fileprivate let threshold: CGFloat = 100
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -149,6 +149,9 @@ class RegistrationController: UIViewController {
     }
     
     fileprivate func setupLayout() {
+        // By default, background color is white when views are created programatically
+        // If views are created using storyboard, bg color of view is white by default
+        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         setOverallStackViewAxis()
         overallStackView.spacing = 8
         selectPhotoButton.widthAnchor.constraint(equalToConstant: 275).isActive = true

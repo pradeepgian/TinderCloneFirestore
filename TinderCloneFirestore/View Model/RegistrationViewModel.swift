@@ -82,7 +82,7 @@ class RegistrationViewModel {
         let uid = Auth.auth().currentUser?.uid ?? ""
         let docData = ["fullName": fullName ?? "", "uid": uid, "imageUrl1": imageUrl]
         
-        //This will create users collection on firestore and store user data 
+        //This will create users collection on firestore and store user data
         Firestore.firestore().collection("users").document(uid).setData(docData) { (error) in
             if let error = error {
                 completion(error)

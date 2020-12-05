@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Override point for customization after application launch.
         window = UIWindow()
-        window?.rootViewController = RegistrationController()
+        window?.rootViewController = HomeController()
         window?.makeKeyAndVisible()
         return true
     }
