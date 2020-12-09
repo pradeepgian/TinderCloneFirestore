@@ -10,11 +10,13 @@ import UIKit
 class CustomTextField: UITextField {
     
     let padding: CGFloat
+    let height: CGFloat
     
     // We pass the padding parameter to constructor to keep it dynamic
     // Corner Radius and Background color will be static for all the text fields
-    init(padding: CGFloat) {
+    init(padding: CGFloat, height: CGFloat) {
         self.padding = padding
+        self.height = height
         super.init(frame: .zero)
         layer.cornerRadius = 25
         backgroundColor = .white
@@ -25,7 +27,7 @@ class CustomTextField: UITextField {
     }
     
     override var intrinsicContentSize: CGSize {
-        return .init(width: 0, height: 50)
+        return .init(width: 0, height: height)
     }
     
     //Returns a drawing rect for text field

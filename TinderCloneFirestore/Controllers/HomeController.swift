@@ -9,9 +9,12 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-class HomeController: UIViewController {
+class HomeController: UIViewController, SettingsControllerDelegate, LoginControllerDelegate {
     
-    var cardViewModels = [CardViewModel]()
+    // var cardViewModels = [CardViewModel]()
+
+    fileprivate var user: User?
+    fileprivate let hud = JGProgressHUD(style: .dark)
     let topStackView = TopNavigationStackView()
     let cardsDeckView = UIView()
     let bottomControlsStackView = HomeBottomControlsStackView()
@@ -23,8 +26,29 @@ class HomeController: UIViewController {
         bottomControlsStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
         
         setupLayout()
-        setupFirestoreUserCards()
-        fetchUsersFromFirestore()
+        fetchCurrentUser()
+//        setupFirestoreUserCards()
+//        fetchUsersFromFirestore()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // When the user logs out on settings controller,
+        //
+        // present the login controller
+        if Auth.auth().currentUser == nil {
+            let loginController = LoginController()
+            loginController.delegate = self
+            let navController = UINavigationController(rootViewController: loginController)
+            navController.modalPresentationStyle = .fullScreen
+            present(navController, animated: true)
+        }
+    }
+    
+    //MARK:- Login Delegate functions
+    func didFinishLoggingIn() {
+        fetchCurrentUser()
     }
 
     // MARK:- Fileprivate
@@ -49,29 +73,47 @@ class HomeController: UIViewController {
         overallStackview.bringSubviewToFront(cardsDeckView)
     }
     
-    fileprivate func setupFirestoreUserCards() {
-        cardViewModels.forEach { (cardViewModel) in
-            let cardView = CardView()
-            cardView.cardViewModel = cardViewModel
-            
-            cardsDeckView.addSubview(cardView)
-            cardView.fillSuperview()
-        }
+//    fileprivate func setupFirestoreUserCards() {
+//        cardViewModels.forEach { (cardViewModel) in
+//            let cardView = CardView()
+//            cardView.cardViewModel = cardViewModel
+//            
+//            cardsDeckView.addSubview(cardView)
+//            cardView.fillSuperview()
+//        }
+//    }
+    
+    @objc func handleSettings() {
+        let settingsController = SettingsController()
+        settingsController.delegate = self
+        let navController = UINavigationController(rootViewController: settingsController)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true)
+    }
+    
+    func didSaveSettings() {
+        fetchCurrentUser()
     }
 
-    @objc func handleSettings() {
-        print("Show registration page")
-        let registrationController = RegistrationController()
-        registrationController.modalPresentationStyle = .fullScreen
-        present(registrationController, animated: true)
+    //MARK:- Firebase
+    fileprivate func fetchCurrentUser() {
+        self.hud.textLabel.text = "Loading"
+        self.hud.show(in: view)
+        cardsDeckView.subviews.forEach({$0.removeFromSuperview()})
+        Firestore.firestore().fetchCurrentUser { (user, error) in
+            self.hud.dismiss()
+            if let error = error {
+                print("Failed to fetch current user:", error)
+                return
+            }
+            self.user = user
+            self.fetchUsersFromFirestore()
+        }
     }
     
     var lastFetchedUser: User?
     
     fileprivate func fetchUsersFromFirestore() {
-        let hud = JGProgressHUD(style: .dark)
-        hud.textLabel.text = "Fetching Users"
-        hud.show(in: view)
         
         // This query will call the collection of user and you will get documents
         // Firestore provides a query functionality for specifying which documents you want to retrieve from a collection or collection group
@@ -80,9 +122,13 @@ class HomeController: UIViewController {
         //This query introduces pagination to page through 2 users at a time
         //Here we set the last fetched user while fetching all documents
         //lastFetchedUser is passed while hitting pagination query
-        let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
+        // let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
+        
+        guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else { return }
+        
+        let query = Firestore.firestore().collection("users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge)
         query.getDocuments { (snapshot, error) in
-            hud.dismiss()
+            self.hud.dismiss()
             
             if let error = error {
                 print("Failed to fetch users:", error)
@@ -93,15 +139,19 @@ class HomeController: UIViewController {
             snapshot?.documents.forEach({ (documentSnapshot) in
                 let userDictionary = documentSnapshot.data()
                 let user = User(dictionary: userDictionary)
-                self.cardViewModels.append(user.toCardViewModel())
-                self.lastFetchedUser = user
-                self.setupCardFromUser(user: user)
+//                self.cardViewModels.append(user.toCardViewModel())
+//                self.lastFetchedUser = user
+                //If not a current user, then add user card to stack
+                if user.uid != Auth.auth().currentUser?.uid {
+                    self.setupCardFromUser(user: user)
+                }
             })
         }
     }
     
     fileprivate func setupCardFromUser(user: User) {
         let cardView = CardView()
+//        cardView.delegate = self
         cardView.cardViewModel = user.toCardViewModel()
         cardsDeckView.addSubview(cardView)
         //here we will get to see bit of a flashing when card views are added on deck view
@@ -110,6 +160,12 @@ class HomeController: UIViewController {
         cardView.fillSuperview()
     }
     
+
+    func didTapMoreInfo() {
+        // let userDetailsController = UserDetailsController()
+        // userDetailsController.modalPresentationStyle = .fullScreen
+        // present(userDetailsController, animated: true)
+    }
     @objc fileprivate func handleRefresh() {
         cardsDeckView.subviews.forEach({ (view) in
             view.layer.removeAllAnimations()

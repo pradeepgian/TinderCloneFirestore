@@ -24,6 +24,12 @@
 		808FD1882575142500C3A6AC /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1872575142500C3A6AC /* RegistrationViewModel.swift */; };
 		808FD18B2575143000C3A6AC /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD18A2575143000C3A6AC /* Bindable.swift */; };
 		808FD19E2575157500C3A6AC /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD19D2575157500C3A6AC /* CustomTextField.swift */; };
+		808FD1D7257BD74400C3A6AC /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1D6257BD74400C3A6AC /* SettingsController.swift */; };
+		808FD1DA257BD76C00C3A6AC /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1D9257BD76C00C3A6AC /* LoginController.swift */; };
+		808FD1DD257BD78A00C3A6AC /* AgeRangeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1DC257BD78A00C3A6AC /* AgeRangeCell.swift */; };
+		808FD1E0257BD7AC00C3A6AC /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1DF257BD7AC00C3A6AC /* SettingsCell.swift */; };
+		808FD1E3257BDABC00C3A6AC /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1E2257BDABC00C3A6AC /* LoginViewModel.swift */; };
+		808FD1E7257BDB5900C3A6AC /* FirebaseUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD1E6257BDB5900C3A6AC /* FirebaseUtilities.swift */; };
 		D9EBC8EC607FFDC66A64FDF9 /* Pods_TinderCloneFirestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 110020DED3DFAAC81E4FCFBC /* Pods_TinderCloneFirestore.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +56,12 @@
 		808FD1872575142500C3A6AC /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
 		808FD18A2575143000C3A6AC /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		808FD19D2575157500C3A6AC /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		808FD1D6257BD74400C3A6AC /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		808FD1D9257BD76C00C3A6AC /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		808FD1DC257BD78A00C3A6AC /* AgeRangeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRangeCell.swift; sourceTree = "<group>"; };
+		808FD1DF257BD7AC00C3A6AC /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		808FD1E2257BDABC00C3A6AC /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		808FD1E6257BDB5900C3A6AC /* FirebaseUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +102,7 @@
 				808FD1592574D88900C3A6AC /* GoogleService-Info.plist */,
 				808FD105256674F600C3A6AC /* Views */,
 				808FD104256674EF00C3A6AC /* Controllers */,
-				808FD1082566752500C3A6AC /* Extension */,
+				808FD1082566752500C3A6AC /* Extensions+Utilities */,
 				808FD1072566750E00C3A6AC /* View Model */,
 				808FD106256674FD00C3A6AC /* Model */,
 				808FD0F225666E7700C3A6AC /* Assets.xcassets */,
@@ -105,6 +117,8 @@
 			children = (
 				808FD0ED25666E7500C3A6AC /* HomeController.swift */,
 				808FD176257513EA00C3A6AC /* RegistrationController.swift */,
+				808FD1D6257BD74400C3A6AC /* SettingsController.swift */,
+				808FD1D9257BD76C00C3A6AC /* LoginController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -115,7 +129,8 @@
 				808FD10F256684F600C3A6AC /* CardView.swift */,
 				808FD10D256684F600C3A6AC /* HomeBottomControlsStackView.swift */,
 				808FD10E256684F600C3A6AC /* TopNavigationStackView.swift */,
-				808FD19D2575157500C3A6AC /* CustomTextField.swift */,
+				808FD1DC257BD78A00C3A6AC /* AgeRangeCell.swift */,
+				808FD1DF257BD7AC00C3A6AC /* SettingsCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -135,16 +150,19 @@
 				808FD11A2566884300C3A6AC /* CardViewModel.swift */,
 				808FD1872575142500C3A6AC /* RegistrationViewModel.swift */,
 				808FD18A2575143000C3A6AC /* Bindable.swift */,
+				808FD1E2257BDABC00C3A6AC /* LoginViewModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
 		};
-		808FD1082566752500C3A6AC /* Extension */ = {
+		808FD1082566752500C3A6AC /* Extensions+Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				808FD19D2575157500C3A6AC /* CustomTextField.swift */,
 				808FD109256675B200C3A6AC /* Extensions+UIView.swift */,
+				808FD1E6257BDB5900C3A6AC /* FirebaseUtilities.swift */,
 			);
-			path = Extension;
+			path = "Extensions+Utilities";
 			sourceTree = "<group>";
 		};
 		A40D87130ED77CE5B9C17F84 /* Pods */ = {
@@ -280,17 +298,23 @@
 			files = (
 				808FD19E2575157500C3A6AC /* CustomTextField.swift in Sources */,
 				808FD18B2575143000C3A6AC /* Bindable.swift in Sources */,
+				808FD1E0257BD7AC00C3A6AC /* SettingsCell.swift in Sources */,
 				808FD112256684F600C3A6AC /* CardView.swift in Sources */,
 				808FD1882575142500C3A6AC /* RegistrationViewModel.swift in Sources */,
 				808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */,
+				808FD1DD257BD78A00C3A6AC /* AgeRangeCell.swift in Sources */,
 				808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */,
+				808FD1D7257BD74400C3A6AC /* SettingsController.swift in Sources */,
 				808FD110256684F600C3A6AC /* HomeBottomControlsStackView.swift in Sources */,
 				808FD11B2566884300C3A6AC /* CardViewModel.swift in Sources */,
 				808FD1162566879200C3A6AC /* Advertiser.swift in Sources */,
 				808FD177257513EB00C3A6AC /* RegistrationController.swift in Sources */,
 				808FD1172566879200C3A6AC /* User.swift in Sources */,
 				808FD111256684F600C3A6AC /* TopNavigationStackView.swift in Sources */,
+				808FD1E7257BDB5900C3A6AC /* FirebaseUtilities.swift in Sources */,
+				808FD1DA257BD76C00C3A6AC /* LoginController.swift in Sources */,
 				808FD10A256675B200C3A6AC /* Extensions+UIView.swift in Sources */,
+				808FD1E3257BDABC00C3A6AC /* LoginViewModel.swift in Sources */,
 				808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
