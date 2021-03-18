@@ -8,54 +8,26 @@
 import UIKit
 import SDWebImage
 
+protocol CardViewDelegate {
+    func didTapMoreInfo(cardViewModel: CardViewModel)
+}
 class CardView: UIView {
+
+    var delegate: CardViewDelegate?
 
     // Here we declare the setter so that when we set the cardViewModel object, all the properties on view are set automatically
     // All the styling related code of the views (like labels, images) will be inside viewmodel
     var cardViewModel: CardViewModel! {
         didSet {
-            //Show the first element present in image names array
-            //This method is called when home screen loads for first time
-            //Accessing index 0 will crash if imageNames.count == 0
-            let imageName = cardViewModel.imageNames.first ?? ""
+
+            swipingPhotosController.cardViewModel = self.cardViewModel
             
-            if let url = URL(string: imageName) {
-                imageView.sd_setImage(with: url)
-            }
             informationLabel.attributedText = cardViewModel.attributedString
             informationLabel.textAlignment = cardViewModel.textAlignment
-
-            //add bars - UIView() on barStackView based on the number of images present in an array
-            (0..<cardViewModel.imageNames.count).forEach { (_) in
-                let barView = UIView()
-                barView.backgroundColor = barDeselectedColor
-                barsStackView.addArrangedSubview(barView)
-            }
-            
-            barsStackView.arrangedSubviews.first?.backgroundColor = .white
-            
-            setupImageIndexObserver()
         }
     }
     
-    // MARK:- Encapsulation
-
-    fileprivate func setupImageIndexObserver() {
-        cardViewModel.imageIndexObserver = { [weak self] (index, imageUrl) in
-            if let url = URL(string: imageUrl ?? "") {
-                self?.imageView.sd_setImage(with: url)
-            }
-            
-            self?.barsStackView.arrangedSubviews.forEach { (v) in
-                v.backgroundColor = self?.barDeselectedColor
-            }
-            self?.barsStackView.arrangedSubviews[index].backgroundColor = .white
-        }
-    }
-    
-    fileprivate let barDeselectedColor = UIColor(white: 0, alpha: 0.1)
-    fileprivate let barsStackView = UIStackView()
-    fileprivate let imageView = UIImageView(image: #imageLiteral(resourceName: "pc1"))
+    fileprivate let swipingPhotosController = SwipingPhotosController(isCardViewMode: true)
     fileprivate let gradientLayer = CAGradientLayer()
     
     
@@ -67,6 +39,17 @@ class CardView: UIView {
         label.numberOfLines = 0
         return label
     }()
+
+    fileprivate let moreInfobutton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "info_icon").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handleMoreInfo), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc fileprivate func handleMoreInfo() {
+        delegate?.didTapMoreInfo(cardViewModel: self.cardViewModel)
+    }
     
     // MARK:- Configurations
     fileprivate let threshold: CGFloat = 100
@@ -82,7 +65,7 @@ class CardView: UIView {
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addGestureRecognizer(panGesture)
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+        // addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
     
     required init?(coder: NSCoder) {
@@ -101,29 +84,21 @@ class CardView: UIView {
         layer.cornerRadius = 10
         clipsToBounds = true
         
-        imageView.contentMode = .scaleAspectFill
-        addSubview(imageView)
+        let swipingPhotosView = swipingPhotosController.view!
+        addSubview(swipingPhotosView)
+        swipingPhotosView.fillSuperview()
         
-        //Entire Card View will be filled with image
-        imageView.fillSuperview()
-        
-        //We set up barstackview after the image is added
-        //Barstackview is at higher z-index. Hence, it is visible
-        setupBarsStackView()
+        // Gradient layer
         setupGradientLayer()
         
         // Add information label and set its position by setting bottom, left and right anchor to 0 with respect to imageview
         // Add padding to information label by setting edge insets to 16 on left, bottom and right
         addSubview(informationLabel)
         informationLabel.anchor(top: nil, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 16, bottom: 16, right: 16))
-    }
 
-    fileprivate func setupBarsStackView() {
-        barsStackView.spacing = 4
-        barsStackView.distribution = .fillEqually
-        
-        addSubview(barsStackView)
-        barsStackView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: 8), size: .init(width: 0, height: 4))
+        // More Info Button
+        addSubview(moreInfobutton)
+        moreInfobutton.anchor(top: nil, leading: nil, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 16, right: 16), size: .init(width: 44, height: 44))
     }
     
     fileprivate func setupGradientLayer() {
@@ -188,18 +163,7 @@ class CardView: UIView {
                 //dismiss the card entirely when card
                 self.removeFromSuperview()
             }
-//            self.frame = CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: self.superview!.frame.height)
         }
     }
     
-    @objc fileprivate func handleTap(gesture: UITapGestureRecognizer) {
-        let tapLocation = gesture.location(in: nil)
-        let shouldAdvanceNextPhoto = tapLocation.x > frame.width / 2 ? true : false
-        
-        if shouldAdvanceNextPhoto {
-            cardViewModel.advanceToNextPhoto()
-        } else {
-            cardViewModel.goToPreviousPhoto()
-        }
-    }
 }

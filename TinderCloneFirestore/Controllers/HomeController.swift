@@ -9,10 +9,8 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-class HomeController: UIViewController, SettingsControllerDelegate, LoginControllerDelegate {
+class HomeController: UIViewController, SettingsControllerDelegate, LoginControllerDelegate, CardViewDelegate {
     
-    // var cardViewModels = [CardViewModel]()
-
     fileprivate var user: User?
     fileprivate let hud = JGProgressHUD(style: .dark)
     let topStackView = TopNavigationStackView()
@@ -27,8 +25,6 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
         
         setupLayout()
         fetchCurrentUser()
-//        setupFirestoreUserCards()
-//        fetchUsersFromFirestore()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -72,16 +68,6 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
         //when you move the carddeckview (with the help of pan gesture), it goes behind the bottomview, hence we move it to front so that its z-position is the top index
         overallStackview.bringSubviewToFront(cardsDeckView)
     }
-    
-//    fileprivate func setupFirestoreUserCards() {
-//        cardViewModels.forEach { (cardViewModel) in
-//            let cardView = CardView()
-//            cardView.cardViewModel = cardViewModel
-//            
-//            cardsDeckView.addSubview(cardView)
-//            cardView.fillSuperview()
-//        }
-//    }
     
     @objc func handleSettings() {
         let settingsController = SettingsController()
@@ -139,8 +125,6 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
             snapshot?.documents.forEach({ (documentSnapshot) in
                 let userDictionary = documentSnapshot.data()
                 let user = User(dictionary: userDictionary)
-//                self.cardViewModels.append(user.toCardViewModel())
-//                self.lastFetchedUser = user
                 //If not a current user, then add user card to stack
                 if user.uid != Auth.auth().currentUser?.uid {
                     self.setupCardFromUser(user: user)
@@ -151,7 +135,7 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
     
     fileprivate func setupCardFromUser(user: User) {
         let cardView = CardView()
-//        cardView.delegate = self
+        cardView.delegate = self
         cardView.cardViewModel = user.toCardViewModel()
         cardsDeckView.addSubview(cardView)
         //here we will get to see bit of a flashing when card views are added on deck view
@@ -160,12 +144,14 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
         cardView.fillSuperview()
     }
     
-
-    func didTapMoreInfo() {
-        // let userDetailsController = UserDetailsController()
-        // userDetailsController.modalPresentationStyle = .fullScreen
-        // present(userDetailsController, animated: true)
+    func didTapMoreInfo(cardViewModel: CardViewModel) {
+        print("Home controller:", cardViewModel.attributedString)
+        let userDetailsController = UserDetailsController()
+        userDetailsController.cardViewModel = cardViewModel
+        userDetailsController.modalPresentationStyle = .fullScreen
+        present(userDetailsController, animated: true)
     }
+    
     @objc fileprivate func handleRefresh() {
         cardsDeckView.subviews.forEach({ (view) in
             view.layer.removeAllAnimations()
