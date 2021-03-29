@@ -24,8 +24,8 @@ class RegistrationViewModel {
     var email: String? { didSet { checkFormValidity() } }
     var password: String? { didSet { checkFormValidity() } }
     
-    fileprivate func checkFormValidity() {
-        let isFormValid = fullName?.isEmpty == false && email?.isEmpty == false && password?.isEmpty == false
+    func checkFormValidity() {
+        let isFormValid = fullName?.isEmpty == false && email?.isEmpty == false && password?.isEmpty == false && bindableImage.value != nil
         //This is equivalent to calling method bindableIsFormValid(isFormValid)
         bindableIsFormValid.value = isFormValid
     }
@@ -80,7 +80,14 @@ class RegistrationViewModel {
     
     fileprivate func saveInfoToFirestore(imageUrl: String, completion: @escaping (Error?) -> ()) {
         let uid = Auth.auth().currentUser?.uid ?? ""
-        let docData = ["fullName": fullName ?? "", "uid": uid, "imageUrl1": imageUrl]
+        //Here we set the default min and max seeking age for newly registered user
+        let docData: [String : Any] = ["fullName": fullName ?? "",
+                       "uid": uid,
+                       "imageUrl1": imageUrl,
+                       "age": 18,
+                       "minSeekingAge": SettingsController.defaultMinSeekingAge,
+                       "maxSeekingAge": SettingsController.defaultMaxSeekingAge
+            ]
         
         //This will create users collection on firestore and store user data
         Firestore.firestore().collection("users").document(uid).setData(docData) { (error) in

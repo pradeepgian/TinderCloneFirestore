@@ -87,9 +87,10 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
         self.hud.show(in: view)
         cardsDeckView.subviews.forEach({$0.removeFromSuperview()})
         Firestore.firestore().fetchCurrentUser { (user, error) in
-            self.hud.dismiss()
+            
             if let error = error {
                 print("Failed to fetch current user:", error)
+                self.hud.dismiss()
                 return
             }
             self.user = user
@@ -110,8 +111,10 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
         //lastFetchedUser is passed while hitting pagination query
         // let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
         
-        guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else { return }
-        
+        // guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else { return }
+        //Here we will provide default min and max seeking age otherwise loading indicator is shown for infinite duration
+        let minAge = user?.minSeekingAge ?? SettingsController.defaultMinSeekingAge
+        let maxAge = user?.maxSeekingAge ?? SettingsController.defaultMaxSeekingAge
         let query = Firestore.firestore().collection("users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThanOrEqualTo: maxAge)
         query.getDocuments { (snapshot, error) in
             self.hud.dismiss()

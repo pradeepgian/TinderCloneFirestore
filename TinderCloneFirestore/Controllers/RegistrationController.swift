@@ -12,6 +12,8 @@ import JGProgressHUD
 
 class RegistrationController: UIViewController {
 
+    var delegate: LoginControllerDelegate?
+
     // UI Components
     let selectPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -64,6 +66,19 @@ class RegistrationController: UIViewController {
         button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         return button
     }()
+
+    let goToLoginButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Go to Login", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .heavy)
+        button.addTarget(self, action: #selector(handleGoToLogin), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc fileprivate func handleGoToLogin() {
+        navigationController?.popViewController(animated: true)
+    }
     
     lazy var verticalStackView: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [
@@ -151,6 +166,7 @@ class RegistrationController: UIViewController {
     fileprivate func setupLayout() {
         // By default, background color is white when views are created programatically
         // If views are created using storyboard, bg color of view is white by default
+        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         setOverallStackViewAxis()
         overallStackView.spacing = 8
@@ -158,6 +174,9 @@ class RegistrationController: UIViewController {
         view.addSubview(overallStackView)
         overallStackView.anchor(top: nil, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 0, left: 50, bottom: 0, right: 50))
         overallStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+
+        view.addSubview(goToLoginButton)
+        goToLoginButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor)
     }
     
     fileprivate func setupGradienLayer() {
@@ -225,6 +244,9 @@ class RegistrationController: UIViewController {
                 return
             }
             print("Finished registering user")
+            self.dismiss(animated: true) {
+                self.delegate?.didFinishLoggingIn()
+            }
         }
     }
     
@@ -253,6 +275,7 @@ extension RegistrationController: UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as? UIImage
         registrationViewModel.bindableImage.value = image
+        registrationViewModel.checkFormValidity()
         dismiss(animated: true, completion: nil)
     }
 }

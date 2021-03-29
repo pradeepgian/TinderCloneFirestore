@@ -90,6 +90,7 @@ class LoginController: UIViewController {
     
     @objc fileprivate func handleBack() {
         let registrationController = RegistrationController()
+        registrationController.delegate = delegate
         navigationController?.pushViewController(registrationController, animated: true)
     }
 

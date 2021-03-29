@@ -26,6 +26,9 @@ class SwipingPhotosController: UIPageViewController, UIPageViewControllerDataSou
     fileprivate let barsStackview = UIStackView(arrangedSubviews: [])
     fileprivate let deselectedBarColor = UIColor(white: 0, alpha: 0.1)
 
+    
+    // isCardViewMode boolean value is used to check if swiping photos controller is added on home controller or user details controller
+    // When it is added on home controller, then isCardViewMode boolean value is set to true
     fileprivate let isCardViewMode: Bool
     
     init(isCardViewMode: Bool = false) {
@@ -103,11 +106,14 @@ class SwipingPhotosController: UIPageViewController, UIPageViewControllerDataSou
     
     @objc fileprivate func handleTap(gesture: UITapGestureRecognizer) {
         let currentController = viewControllers!.first!
+        //Get the index of current controller
         if let index = controllers.firstIndex(of: currentController) {
             
             barsStackview.arrangedSubviews.forEach({$0.backgroundColor = deselectedBarColor})
             
             if gesture.location(in: self.view).x > view.frame.width / 2 {
+                // Below lines of code will be executed when we tap on left half of the view
+                // Here we calculate next index in min function so that it doesnt go out of range
                 let nextIndex = min(index + 1, controllers.count - 1)
                 let nextController = controllers[nextIndex]
                 setViewControllers([nextController], direction: .forward, animated: false)
@@ -121,6 +127,7 @@ class SwipingPhotosController: UIPageViewController, UIPageViewControllerDataSou
         }
     }
     
+    //This will disable the swiping ability of scroll view added as one of the subviews
     fileprivate func disableSwipingAbility() {
         view.subviews.forEach { (v) in
             if let v = v as? UIScrollView {
