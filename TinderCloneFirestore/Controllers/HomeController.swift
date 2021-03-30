@@ -22,7 +22,8 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
         // Do any additional setup after loading the view.
         topStackView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         bottomControlsStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
-        
+        bottomControlsStackView.likeButton.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
+        bottomControlsStackView.dislikeButton.addTarget(self, action: #selector(handleDislike), for: .touchUpInside)
         setupLayout()
         fetchCurrentUser()
     }
@@ -102,6 +103,12 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
     
     fileprivate func fetchUsersFromFirestore() {
         
+        
+        cardsDeckView.subviews.forEach({$0.removeFromSuperview()})
+        
+        //set it to nil everytime when we fetch the users from firestore
+        topCardView = nil
+        
         // This query will call the collection of user and you will get documents
         // Firestore provides a query functionality for specifying which documents you want to retrieve from a collection or collection group
         // Check below link for more details
@@ -124,19 +131,37 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
                 return
             }
             
+            // Linked List
+            var previousCardView: CardView?
+            
             //On snapshot object, you will be able to access all the documents
             snapshot?.documents.forEach({ (documentSnapshot) in
                 let userDictionary = documentSnapshot.data()
                 let user = User(dictionary: userDictionary)
                 //If not a current user, then add user card to stack
                 if user.uid != Auth.auth().currentUser?.uid {
-                    self.setupCardFromUser(user: user)
+                    let cardView = self.setupCardFromUser(user: user)
+                    //Lets say first card is Jane
+                    //second card is pradeep
+                    //third card is deepak
+                    
+                    // in 1st iteration, previousCardView will be nil and will be set to jane
+                    // In 2nd iteration, previousCardView?.nextCardView will be pradeep and previousCardView object will become pradeep
+                    // and so on..
+                    // In short, we keep on setting nextCardView property for each card
+                    previousCardView?.nextCardView = cardView
+                    previousCardView = cardView
+                    
+                    // in all iterations, topCardView will be jane
+                    if self.topCardView == nil {
+                        self.topCardView = cardView
+                    }
                 }
             })
         }
     }
     
-    fileprivate func setupCardFromUser(user: User) {
+    fileprivate func setupCardFromUser(user: User) -> CardView {
         let cardView = CardView()
         cardView.delegate = self
         cardView.cardViewModel = user.toCardViewModel()
@@ -145,6 +170,7 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
         //hence reduce the z-index of recently added card
         cardsDeckView.sendSubviewToBack(cardView)
         cardView.fillSuperview()
+        return cardView
     }
     
     func didTapMoreInfo(cardViewModel: CardViewModel) {
@@ -160,6 +186,48 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
             view.layer.removeAllAnimations()
         })
         fetchUsersFromFirestore()
+    }
+    
+    var topCardView: CardView?
+    
+    @objc fileprivate func handleLike() {
+        performSwipeAnimation(translation: 700, angle: 15)
+    }
+    
+    @objc fileprivate func handleDislike() {
+        performSwipeAnimation(translation: -700, angle: -15)
+    }
+    
+    fileprivate func performSwipeAnimation(translation: CGFloat, angle: CGFloat) {
+        let duration = 0.5
+        
+        let translationAnimation = CABasicAnimation(keyPath: "position.x")
+        translationAnimation.toValue = translation
+        translationAnimation.duration = duration
+        translationAnimation.fillMode = .forwards
+        translationAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        translationAnimation.isRemovedOnCompletion = false
+        
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotationAnimation.toValue = angle * CGFloat.pi / 180
+        rotationAnimation.duration = duration
+        
+        let cardView = topCardView
+        topCardView = cardView?.nextCardView
+        
+        CATransaction.setCompletionBlock {
+            cardView?.removeFromSuperview()
+        }
+        
+        cardView?.layer.add(translationAnimation, forKey: "translation")
+        cardView?.layer.add(rotationAnimation, forKey: "rotation")
+        
+        CATransaction.commit()
+    }
+    
+    func didRemoveCard(cardView: CardView) {
+        topCardView?.removeFromSuperview()
+        topCardView = self.topCardView?.nextCardView
     }
 
 }
