@@ -152,24 +152,39 @@ class CardView: UIView {
         //If translation value is greater than threshold, set dismiss card to true
         let shouldDismissCard = abs(gesture.translation(in: nil).x) > threshold
         
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut, animations: {
-            if shouldDismissCard {
-                //change the center x position of card to dismiss it
-                self.center = CGPoint(x: 600 * translationDirection, y: 0)
+        if shouldDismissCard {
+            // Hack solution
+            guard let homeController = self.delegate as? HomeController else { return }
+            
+            if translationDirection == 1 {
+                homeController.handleLike()
             } else {
-                //Identity means moving the card to its original (initial) position
+                homeController.handleDislike()
+            }
+        } else {
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut, animations: {
                 self.transform = .identity
-            }
-        }) { (_) in
-            self.transform = .identity
-            if shouldDismissCard {
-                //dismiss the card entirely when card
-                self.removeFromSuperview()
-                
-                // Reset topCardView inside HomeController
-                self.delegate?.didRemoveCard(cardView: self)
-            }
+            })
         }
+        
+//        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut, animations: {
+//            if shouldDismissCard {
+//                //change the center x position of card to dismiss it
+//                self.center = CGPoint(x: 600 * translationDirection, y: 0)
+//            } else {
+//                //Identity means moving the card to its original (initial) position
+//                self.transform = .identity
+//            }
+//        }) { (_) in
+//            self.transform = .identity
+//            if shouldDismissCard {
+//                //dismiss the card entirely when card
+//                self.removeFromSuperview()
+//
+//                // Reset topCardView inside HomeController
+//                self.delegate?.didRemoveCard(cardView: self)
+//            }
+//        }
     }
     
 }
