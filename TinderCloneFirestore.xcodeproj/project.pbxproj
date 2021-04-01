@@ -11,6 +11,8 @@
 		8012074325B5DB4400DD1B66 /* SwipingPhotosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8012074225B5DB4400DD1B66 /* SwipingPhotosController.swift */; };
 		8012079225B6058100DD1B66 /* UserDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8012079125B6058100DD1B66 /* UserDetailsController.swift */; };
 		8060A97A26159F3800AA7808 /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97926159F3800AA7808 /* MatchView.swift */; };
+		8060A97D2615A81A00AA7808 /* SendMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97C2615A81A00AA7808 /* SendMessageButton.swift */; };
+		8060A9802615A83900AA7808 /* KeepSwipingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */; };
 		808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0E925666E7500C3A6AC /* AppDelegate.swift */; };
 		808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */; };
 		808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0ED25666E7500C3A6AC /* HomeController.swift */; };
@@ -42,6 +44,8 @@
 		8012074225B5DB4400DD1B66 /* SwipingPhotosController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipingPhotosController.swift; sourceTree = "<group>"; };
 		8012079125B6058100DD1B66 /* UserDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsController.swift; sourceTree = "<group>"; };
 		8060A97926159F3800AA7808 /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
+		8060A97C2615A81A00AA7808 /* SendMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageButton.swift; sourceTree = "<group>"; };
+		8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepSwipingButton.swift; sourceTree = "<group>"; };
 		808FD0E625666E7500C3A6AC /* TinderCloneFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderCloneFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		808FD0E925666E7500C3A6AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 				808FD1DC257BD78A00C3A6AC /* AgeRangeCell.swift */,
 				808FD1DF257BD7AC00C3A6AC /* SettingsCell.swift */,
 				8060A97926159F3800AA7808 /* MatchView.swift */,
+				8060A97C2615A81A00AA7808 /* SendMessageButton.swift */,
+				8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -313,6 +319,7 @@
 				808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */,
 				808FD1DD257BD78A00C3A6AC /* AgeRangeCell.swift in Sources */,
 				808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */,
+				8060A9802615A83900AA7808 /* KeepSwipingButton.swift in Sources */,
 				8060A97A26159F3800AA7808 /* MatchView.swift in Sources */,
 				808FD1D7257BD74400C3A6AC /* SettingsController.swift in Sources */,
 				808FD110256684F600C3A6AC /* HomeBottomControlsStackView.swift in Sources */,
@@ -326,6 +333,7 @@
 				808FD1DA257BD76C00C3A6AC /* LoginController.swift in Sources */,
 				808FD10A256675B200C3A6AC /* Extensions+UIView.swift in Sources */,
 				808FD1E3257BDABC00C3A6AC /* LoginViewModel.swift in Sources */,
+				8060A97D2615A81A00AA7808 /* SendMessageButton.swift in Sources */,
 				808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */,
 				8012074325B5DB4400DD1B66 /* SwipingPhotosController.swift in Sources */,
 			);
