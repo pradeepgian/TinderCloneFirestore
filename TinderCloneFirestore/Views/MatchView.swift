@@ -6,8 +6,37 @@
 //
 
 import UIKit
+import Firebase
 
 class MatchView: UIView {
+    
+    var currentUser: User!
+    
+    var cardUID: String! {
+        didSet {
+            let query = Firestore.firestore().collection("users")
+            query.document(cardUID).getDocument { (snapshot, error) in
+                if let error = error {
+                    print("Failed to fetch card user:", error)
+                    return
+                }
+                
+                guard let dictionary = snapshot?.data() else { return }
+                let user = User(dictionary: dictionary)
+                
+                self.descriptionLabel.text = "You and \(user.name ?? "") have liked\neach other"
+                
+                guard let url = URL(string: user.imageUrl1 ?? user.imageUrl2 ?? user.imageUrl3 ?? "") else { return }
+                self.cardUserImageView.sd_setImage(with: url)
+                
+                guard let currentUserImageUrl = URL(string: self.currentUser.imageUrl1 ?? "") else { return }
+                self.currentUserImageView.sd_setImage(with: currentUserImageUrl) { (_, _, _, _) in
+                    // once the current user image loads, unhide all the views and perform animation
+                       self.setupAnimations()
+                   }
+            }
+        }
+    }
     
     fileprivate let itsAMatchImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "itsamatch"))
@@ -61,7 +90,7 @@ class MatchView: UIView {
         super.init(frame: frame)
         setupBlurView()
         setupLayout()
-        setupAnimations()
+//        setupAnimations()
     }
     
     required init?(coder: NSCoder) {
@@ -95,13 +124,21 @@ class MatchView: UIView {
         }
     }
     
+    lazy var views = [
+        itsAMatchImageView,
+        descriptionLabel,
+        currentUserImageView,
+        cardUserImageView,
+        sendMessageButton,
+        keepSwipingButton
+    ]
+    
     fileprivate func setupLayout() {
-        addSubview(itsAMatchImageView)
-        addSubview(descriptionLabel)
-        addSubview(currentUserImageView)
-        addSubview(cardUserImageView)
-        addSubview(sendMessageButton)
-        addSubview(keepSwipingButton)
+        // hide all the views till the time current user image url doesnt load
+        views.forEach { (v) in
+            addSubview(v)
+            v.alpha = 0
+        }
         
         let imageWidth: CGFloat = 140
         
@@ -124,6 +161,10 @@ class MatchView: UIView {
     }
     
     fileprivate func setupAnimations() {
+        
+        
+        views.forEach({$0.alpha = 1})
+        
         let angle = -30 * CGFloat.pi / 180
         
         // Keep the initial position of circular image views on the extreme left and right
