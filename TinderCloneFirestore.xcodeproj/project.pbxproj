@@ -14,6 +14,7 @@
 		8060A97D2615A81A00AA7808 /* SendMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97C2615A81A00AA7808 /* SendMessageButton.swift */; };
 		8060A9802615A83900AA7808 /* KeepSwipingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */; };
 		8060A99E2619E00100AA7808 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A99D2619E00100AA7808 /* MessagesController.swift */; };
+		8060AA0F261A16F300AA7808 /* MatchesNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060AA0E261A16F300AA7808 /* MatchesNavBar.swift */; };
 		808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0E925666E7500C3A6AC /* AppDelegate.swift */; };
 		808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */; };
 		808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0ED25666E7500C3A6AC /* HomeController.swift */; };
@@ -46,6 +47,7 @@
 		8060A97C2615A81A00AA7808 /* SendMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageButton.swift; sourceTree = "<group>"; };
 		8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepSwipingButton.swift; sourceTree = "<group>"; };
 		8060A99D2619E00100AA7808 /* MessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
+		8060AA0E261A16F300AA7808 /* MatchesNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchesNavBar.swift; sourceTree = "<group>"; };
 		808FD0E625666E7500C3A6AC /* TinderCloneFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderCloneFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		808FD0E925666E7500C3A6AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				8060A97926159F3800AA7808 /* MatchView.swift */,
 				8060A97C2615A81A00AA7808 /* SendMessageButton.swift */,
 				8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */,
+				8060AA0E261A16F300AA7808 /* MatchesNavBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				8060A97D2615A81A00AA7808 /* SendMessageButton.swift in Sources */,
 				808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */,
 				8012074325B5DB4400DD1B66 /* SwipingPhotosController.swift in Sources */,
+				8060AA0F261A16F300AA7808 /* MatchesNavBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
