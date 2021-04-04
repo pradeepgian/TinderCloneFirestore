@@ -20,8 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Override point for customization after application launch.
         window = UIWindow()
-        window?.rootViewController = HomeController()
-        window?.makeKeyAndVisible()
+        
+        // If we dont embed home controller in navigation bar, we wont be able to push messages view on top of home view
+        // we will get navigationController object as nil
+        window?.rootViewController = UINavigationController(rootViewController: HomeController())
+        window?.makeKeyAndVisible() 
         return true
     }
 

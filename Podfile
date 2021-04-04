@@ -15,6 +15,7 @@ pod 'Firebase/Storage'
 pod 'FirebaseFirestoreSwift'
 pod 'SDWebImage', '~> 5.0'
 pod 'JGProgressHUD'
+pod 'LBTATools'
 
 # add pods for any other desired Firebase products
 # https://firebase.google.com/docs/ios/setup#available-pods

@@ -20,7 +20,10 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        navigationController?.navigationBar.isHidden = true
+        
         topStackView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        topStackView.messageButton.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
         bottomControlsStackView.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
         bottomControlsStackView.likeButton.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
         bottomControlsStackView.dislikeButton.addTarget(self, action: #selector(handleDislike), for: .touchUpInside)
@@ -317,6 +320,11 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
     func didRemoveCard(cardView: CardView) {
         topCardView?.removeFromSuperview()
         topCardView = self.topCardView?.nextCardView
+    }
+    
+    @objc fileprivate func handleMessages() {
+        let vc = MessagesController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(vc, animated: true)
     }
 
 }
