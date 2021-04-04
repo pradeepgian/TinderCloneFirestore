@@ -6,21 +6,17 @@
 //
 
 import LBTATools
+import Firebase
+import SDWebImage
 
-class MessagesController: LBTAListController<MatchCell, UIColor>, UICollectionViewDelegateFlowLayout {
+class MessagesController: LBTAListController<MatchCell, Match>, UICollectionViewDelegateFlowLayout {
     
     let customNavBar = MatchesNavBar()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        items = [
-            .red,
-            .blue,
-            .green,
-            .purple,
-            .orange
-        ]
+        fetchMatches()
         
         collectionView.backgroundColor = .white
         
@@ -33,6 +29,26 @@ class MessagesController: LBTAListController<MatchCell, UIColor>, UICollectionVi
         collectionView.contentInset.top = 150
     }
     
+    fileprivate func fetchMatches() {
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        
+        Firestore.firestore().collection("matches_messages").document(currentUserId).collection("matches").getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Failed to fetch matches:", error)
+                return
+            }
+            
+            var matches = [Match]()
+            snapshot?.documents.forEach({ (documentSnapshot) in
+                let dictionary = documentSnapshot.data()
+                matches.append(.init(dictionary: dictionary))
+            })
+            
+            self.items = matches
+            self.collectionView.reloadData()
+        }
+    }
+    
     @objc fileprivate func handleBack() {
         navigationController?.popViewController(animated: true)
     }
@@ -40,16 +56,23 @@ class MessagesController: LBTAListController<MatchCell, UIColor>, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: 100, height: 120)
     }
+    
+    // By setting an inset at top and bottom, collection view cells do not conflict with top shadow
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .init(top: 16, left: 0, bottom: 16, right: 0)
+    }
+    
 }
 
-class MatchCell: LBTAListCell<UIColor> {
+class MatchCell: LBTAListCell<Match> {
     
     let profileImageView: UIImageView = UIImageView(image: #imageLiteral(resourceName: "2080ti"), contentMode: .scaleAspectFill)
     let usernameLabel = UILabel(text: "Username Here", font: .systemFont(ofSize: 14, weight: .semibold), textColor: #colorLiteral(red: 0.2099210322, green: 0.209956944, blue: 0.2099131644, alpha: 1), textAlignment: .center, numberOfLines: 2)
     
-    override var item: UIColor! {
+    override var item: Match! {
         didSet {
-            backgroundColor = item
+            usernameLabel.text = item.name
+            profileImageView.sd_setImage(with: URL(string: item.profileImageUrl))
         }
     }
     
@@ -63,5 +86,14 @@ class MatchCell: LBTAListCell<UIColor> {
         
 //        stack(stack(profileImageView, alignment: .center), usernameLabel)
         stack(profileImageView, usernameLabel, alignment: .center)
+    }
+}
+
+struct Match {
+    let name, profileImageUrl: String
+    
+    init(dictionary: [String: Any]) {
+        self.name = dictionary["name"] as? String ?? ""
+        self.profileImageUrl = dictionary["profileImageUrl"] as? String ?? ""
     }
 }
