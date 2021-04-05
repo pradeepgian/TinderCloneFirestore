@@ -7,7 +7,7 @@
 
 import LBTATools
 
-class MatchesNavBar: UIView {
+class MatchesMessagesViewNavBar: UIView {
 
     let backButton = UIButton(image: #imageLiteral(resourceName: "app_icon"), tintColor: .init(white: 0, alpha: 0.15))
     

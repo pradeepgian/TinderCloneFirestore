@@ -9,9 +9,9 @@ import LBTATools
 import Firebase
 import SDWebImage
 
-class MessagesListController: LBTAListController<MatchCell, Match>, UICollectionViewDelegateFlowLayout {
+class MatchesMessagesListController: LBTAListController<MatchCell, Match>, UICollectionViewDelegateFlowLayout {
     
-    let customNavBar = MatchesNavBar()
+    let customNavBar = MatchesMessagesViewNavBar()
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -353,7 +353,7 @@ class HomeController: UIViewController, SettingsControllerDelegate, LoginControl
     }
     
     @objc fileprivate func handleMessages() {
-        let vc = MessagesController()
+        let vc = MatchesMessagesListController()
         navigationController?.pushViewController(vc, animated: true)
     }
 
