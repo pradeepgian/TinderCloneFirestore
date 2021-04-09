@@ -6,6 +6,7 @@
 //
 
 import LBTATools
+import Firebase
 
 class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionViewDelegateFlowLayout {
     
@@ -16,13 +17,18 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
     fileprivate let match: Match
     
     // Input accessory view
-    lazy var redView: CustomInputAccessoryView = {
-        return CustomInputAccessoryView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 50))
+    lazy var customInputView: CustomInputAccessoryView = {
+        let civ = CustomInputAccessoryView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 50))
+        civ.sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
+        return civ
     }()
     
+    // inputAccessoryView is provided by UICollectionViewController
+    // It provides a default functionality of dismissing the keyboards when user scrolls down the chat view
+    // you can also see the pan gesture effect of keyboard dismissal
     override var inputAccessoryView: UIView? {
         get {
-            return redView
+            return customInputView
         }
     }
     
@@ -62,15 +68,11 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+        
         collectionView.keyboardDismissMode = .interactive
         
-        items = [
-            .init(text: "Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.Hello from the other side.", isFromCurrentLoggedUser: false),
-            .init(text: "Hello.", isFromCurrentLoggedUser: true),
-            .init(text: "Hello from the other side.", isFromCurrentLoggedUser: false),
-            .init(text: "Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla", isFromCurrentLoggedUser: true)
-        ]
-        
+        fetchMessages()
         
         setupUI()
     }
@@ -93,6 +95,72 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
     @objc fileprivate func handleBack() {
         navigationController?.popViewController(animated: true)
     }
+    
+    @objc fileprivate func handleKeyboardShow() {
+        self.collectionView.scrollToItem(at: [0, items.count - 1], at: .bottom, animated: true)
+    }
+    
+    @objc fileprivate func handleSend() {
+        print(customInputView.textView.text ?? "")
+        
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        
+        // save the messages data for current user
+        let collection = Firestore.firestore().collection("matches_messages").document(currentUserId).collection(match.uid)
+        
+        let data = ["text": customInputView.textView.text ?? "", "fromId": currentUserId, "toId": match.uid, "timestamp": Timestamp(date: Date())] as [String : Any]
+        
+        collection.addDocument(data: data) { (error) in
+            if let error = error {
+                print("Failed to save message:", error)
+                return
+            }
+            
+            print("Successfully saved message into firestore")
+            self.customInputView.textView.text = nil
+            self.customInputView.placeholderLabel.isHidden = false
+        }
+        
+        // save the messages data for matched (recipient) user
+        let toCollection = Firestore.firestore().collection("matches_messages").document(match.uid).collection(currentUserId)
+        
+        toCollection.addDocument(data: data) { (error) in
+            if let error = error {
+                print("Failed to save message:", error)
+                return
+            }
+            
+            print("Successfully saved message into firestore")
+            self.customInputView.textView.text = nil
+            self.customInputView.placeholderLabel.isHidden = false
+        }
+    }
+    
+    fileprivate func fetchMessages() {
+        print("Fetching messages")
+        
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        
+        let query = Firestore.firestore().collection("matches_messages").document(currentUserId).collection(match.uid).order(by: "timestamp")
+        
+        // This listerner will trigger whenever new message is stored in firestore
+        query.addSnapshotListener { (querySnapshot, error) in
+            if let error = error {
+                print("Failed to fetch messages:", error)
+                return
+            }
+            
+            querySnapshot?.documentChanges.forEach({ (change) in
+                if change.type == .added {
+                    let dictionary = change.document.data()
+                    self.items.append(.init(dictionary: dictionary))
+                }
+            })
+            self.collectionView.reloadData()
+            self.collectionView.scrollToItem(at: [0, self.items.count - 1], at: .bottom, animated: true)
+        }
+    }
+    
 }
 
 //struct Message {
