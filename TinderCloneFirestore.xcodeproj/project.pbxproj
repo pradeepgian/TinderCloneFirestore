@@ -17,6 +17,9 @@
 		8060AA0F261A16F300AA7808 /* MatchesMessagesViewNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060AA0E261A16F300AA7808 /* MatchesMessagesViewNavBar.swift */; };
 		8060AA12261B218700AA7808 /* ChatViewNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060AA11261B218700AA7808 /* ChatViewNavBar.swift */; };
 		8060AA15261B224F00AA7808 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060AA14261B224F00AA7808 /* ChatLogController.swift */; };
+		8060AA1D261B4CDD00AA7808 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060AA1C261B4CDD00AA7808 /* Message.swift */; };
+		8060AA20261B4D3800AA7808 /* CustomInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060AA1F261B4D3800AA7808 /* CustomInputAccessoryView.swift */; };
+		8060AA23261B4D5900AA7808 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060AA22261B4D5900AA7808 /* MessageCell.swift */; };
 		808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0E925666E7500C3A6AC /* AppDelegate.swift */; };
 		808FD0EC25666E7500C3A6AC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */; };
 		808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808FD0ED25666E7500C3A6AC /* HomeController.swift */; };
@@ -52,6 +55,9 @@
 		8060AA0E261A16F300AA7808 /* MatchesMessagesViewNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchesMessagesViewNavBar.swift; sourceTree = "<group>"; };
 		8060AA11261B218700AA7808 /* ChatViewNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewNavBar.swift; sourceTree = "<group>"; };
 		8060AA14261B224F00AA7808 /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
+		8060AA1C261B4CDD00AA7808 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		8060AA1F261B4D3800AA7808 /* CustomInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputAccessoryView.swift; sourceTree = "<group>"; };
+		8060AA22261B4D5900AA7808 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		808FD0E625666E7500C3A6AC /* TinderCloneFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderCloneFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		808FD0E925666E7500C3A6AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		808FD0EB25666E7500C3A6AC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +162,8 @@
 				8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */,
 				8060AA0E261A16F300AA7808 /* MatchesMessagesViewNavBar.swift */,
 				8060AA11261B218700AA7808 /* ChatViewNavBar.swift */,
+				8060AA1F261B4D3800AA7808 /* CustomInputAccessoryView.swift */,
+				8060AA22261B4D5900AA7808 /* MessageCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -165,6 +173,7 @@
 			children = (
 				808FD1142566879200C3A6AC /* Advertiser.swift */,
 				808FD1152566879200C3A6AC /* User.swift */,
+				8060AA1C261B4CDD00AA7808 /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -324,7 +333,10 @@
 				808FD18B2575143000C3A6AC /* Bindable.swift in Sources */,
 				808FD1E0257BD7AC00C3A6AC /* SettingsCell.swift in Sources */,
 				8060A99E2619E00100AA7808 /* MatchesMessagesListController.swift in Sources */,
+				8060AA1D261B4CDD00AA7808 /* Message.swift in Sources */,
+				8060AA20261B4D3800AA7808 /* CustomInputAccessoryView.swift in Sources */,
 				808FD112256684F600C3A6AC /* CardView.swift in Sources */,
+				8060AA23261B4D5900AA7808 /* MessageCell.swift in Sources */,
 				808FD1882575142500C3A6AC /* RegistrationViewModel.swift in Sources */,
 				808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */,
 				808FD1DD257BD78A00C3A6AC /* AgeRangeCell.swift in Sources */,
