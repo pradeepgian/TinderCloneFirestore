@@ -9,7 +9,12 @@ import LBTATools
 import Firebase
 //import SDWebImage
 
-class MatchesMessagesListController: LBTAListHeaderController<RecentMessageCell, UIColor, MatchesHeader>, UICollectionViewDelegateFlowLayout {
+class MatchesMessagesListController: LBTAListHeaderController<RecentMessageCell, RecentMessage, MatchesHeader>, UICollectionViewDelegateFlowLayout {
+    
+    // Create an empty recent messages dictionary
+    // key will be udid of user who has sent message
+    // value will be recent message sent by user
+    var recentMessagesDictionary = [String: RecentMessage]()
     
     let customNavBar = MatchesMessagesViewNavBar()
     
@@ -18,9 +23,45 @@ class MatchesMessagesListController: LBTAListHeaderController<RecentMessageCell,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        items = [.red, .blue, .green, .purple]
+        fetchRecentMessages()
+        
+        items = []
         
         setupUI()
+    }
+    
+    fileprivate func fetchRecentMessages() {
+        guard let  currentUserId = Auth.auth().currentUser?.uid else { return }
+        
+        // Add a snapshot listener to check if new recent messages have been added to the document
+        Firestore.firestore().collection("matches_messages").document(currentUserId).collection("recent_messages").addSnapshotListener { (querySnapshot, error) in
+            
+            if let error = error {
+                print("Error while listening for recent messages:", error)
+                return
+            }
+            
+            // change type will be added when new user will send the message
+            querySnapshot?.documentChanges.forEach({ (change) in
+                if change.type == .added || change.type == .modified {
+                    let dictionary = change.document.data()
+                    let recentMessage = RecentMessage(dictionary: dictionary)
+                    self.recentMessagesDictionary[recentMessage.uid] = recentMessage
+                }
+            })
+            
+            self.resetItems()
+        }
+    }
+    
+    fileprivate func resetItems() {
+        // sort the dictionary values (messages) in descending order
+        // so that user who sent the recent message will always be shown at the top
+        let values = Array(recentMessagesDictionary.values)
+        items = values.sorted(by: { (rm1, rm2) -> Bool in
+            return rm1.timestamp.compare(rm2.timestamp) == .orderedDescending
+        })
+        collectionView.reloadData()
     }
     
     fileprivate func setupUI() {
@@ -77,15 +118,17 @@ class MatchesMessagesListController: LBTAListHeaderController<RecentMessageCell,
     }
 }
 
-class RecentMessageCell: LBTAListCell<UIColor> {
+class RecentMessageCell: LBTAListCell<RecentMessage> {
     
     let userProfileImageView = UIImageView(image: #imageLiteral(resourceName: "top_left_profile"), contentMode: .scaleAspectFill)
     let usernameLabel = UILabel(text: "USERNAME HERE", font: .boldSystemFont(ofSize: 18))
     let messageTextLabel = UILabel(text: "Some long line of text that should span 2 line", font: .systemFont(ofSize: 16), textColor: .gray, numberOfLines: 2)
     
-    override var item: UIColor! {
+    override var item: RecentMessage! {
         didSet {
-//            backgroundColor = item
+            usernameLabel.text = item.name
+            messageTextLabel.text = item.text
+            userProfileImageView.sd_setImage(with: URL(string: item.profileImageUrl))
         }
     }
     
@@ -99,5 +142,19 @@ class RecentMessageCell: LBTAListCell<UIColor> {
             spacing: 20, alignment: .center).padLeft(20).padRight(20)
         
         addSeparatorView(leadingAnchor: usernameLabel.leadingAnchor)
+    }
+}
+
+struct RecentMessage {
+    let text, uid, name, profileImageUrl: String
+    let timestamp: Timestamp
+    
+    init(dictionary: [String: Any]) {
+        self.text = dictionary["text"] as? String ?? ""
+        self.uid = dictionary["uid"] as? String ?? ""
+        self.name = dictionary["name"] as? String ?? ""
+        self.profileImageUrl = dictionary["profileImageUrl"] as? String ?? ""
+        
+        self.timestamp = dictionary["timestamp"] as? Timestamp ?? Timestamp(date: Date())
     }
 }
