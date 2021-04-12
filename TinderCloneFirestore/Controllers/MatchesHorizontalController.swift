@@ -10,7 +10,8 @@ import Firebase
 
 class MatchesHorizontalController: LBTAListController<MatchCell, Match>, UICollectionViewDelegateFlowLayout {
     
-    var rootMatchesController: MatchesMessagesListController?
+    // using strong object results in a retain cycle
+    weak var rootMatchesController: MatchesMessagesListController?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -10,6 +10,8 @@ import Firebase
 
 class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionViewDelegateFlowLayout {
     
+    var currentUser: User?
+    
     fileprivate lazy var customNavBar = ChatViewNavBar(match: match)
     
     fileprivate let navBarHeight: CGFloat = 120
@@ -68,6 +70,8 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchCurrentUser()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         
         collectionView.keyboardDismissMode = .interactive
@@ -75,6 +79,26 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
         fetchMessages()
         
         setupUI()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Tells you if its being popped off the nav stack
+        if isMovingFromParent {
+            listener?.remove()
+        }
+    }
+    
+    deinit {
+        print("Object is destroying itself properly, no retain cycles or any other memory related issues. Memory being reclaimed properly")
+    }
+    
+    fileprivate func fetchCurrentUser() {
+        Firestore.firestore().collection("users").document(Auth.auth().currentUser?.uid ?? "").getDocument { (snapshot, error) in
+            let data = snapshot?.data() ?? [:]
+            self.currentUser = User(dictionary: data)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -102,7 +126,11 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
     
     @objc fileprivate func handleSend() {
         print(customInputView.textView.text ?? "")
-        
+        saveToFromMessages()
+        saveToFromRecentMessages()
+    }
+    
+    fileprivate func saveToFromMessages() {
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
         
         // save the messages data for current user
@@ -136,6 +164,37 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
         }
     }
     
+    fileprivate func saveToFromRecentMessages() {
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        
+        // save the recent messages data for current user
+        let data = ["text": customInputView.textView.text ?? "", "name": match.name, "profileImageUrl": match.profileImageUrl, "timestamp": Timestamp(date: Date()), "uid": match.uid] as [String : Any]
+        
+        Firestore.firestore().collection("matches_messages").document(currentUserId).collection("recent_messages").document(match.uid).setData(data) { (error) in
+            if let error = error {
+                print("Failed to save recent message to Firestore:", error)
+                return
+            }
+            
+            print("Saved recent message")
+        }
+        
+        // save the recent messages data for recipient user
+        guard let currentUser = self.currentUser else { return }
+        let toData = ["text": customInputView.textView.text ?? "", "name": currentUser.name ?? "", "profileImageUrl": currentUser.imageUrl1 ?? "", "timestamp": Timestamp(date: Date()), "uid": currentUserId] as [String : Any]
+        
+        Firestore.firestore().collection("matches_messages").document(match.uid).collection("recent_messages").document(currentUserId).setData(toData) { (error) in
+            if let error = error {
+                print("Failed to save recent message to Firestore:", error)
+                return
+            }
+            
+            print("Saved recent message")
+        }
+    }
+    
+    var listener: ListenerRegistration?
+    
     fileprivate func fetchMessages() {
         print("Fetching messages")
         
@@ -144,7 +203,7 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
         let query = Firestore.firestore().collection("matches_messages").document(currentUserId).collection(match.uid).order(by: "timestamp")
         
         // This listerner will trigger whenever new message is stored in firestore
-        query.addSnapshotListener { (querySnapshot, error) in
+        listener = query.addSnapshotListener { (querySnapshot, error) in
             if let error = error {
                 print("Failed to fetch messages:", error)
                 return
@@ -163,63 +222,4 @@ class ChatLogController: LBTAListController<MessageCell, Message>, UICollectionV
     
 }
 
-//struct Message {
-//    let text: String
-//    let isFromCurrentLoggedUser: Bool
-//}
-//
-//class MessageCell: LBTAListCell<Message> {
-//
-//    let textView: UITextView = {
-//        let tv = UITextView()
-//        tv.backgroundColor = .clear
-//        tv.font = .systemFont(ofSize: 20)
-//        tv.isScrollEnabled = false
-//        tv.isEditable = false
-//        return tv
-//    }()
-//
-//    let bubbleContainer = UIView(backgroundColor: #colorLiteral(red: 0.9146190882, green: 0.914750576, blue: 0.9145902991, alpha: 1))
-//
-//    override var item: Message! {
-//        didSet {
-//            textView.text = item.text
-//
-//            // activate or de-activate constraints if the message is sent from logged in user or not
-//            if item.isFromCurrentLoggedUser {
-//                anchoredConstraints.trailing?.isActive = true
-//                anchoredConstraints.leading?.isActive = false
-//                bubbleContainer.backgroundColor = #colorLiteral(red: 0.3832361698, green: 0.8062211871, blue: 0.9797287583, alpha: 1)
-//                textView.textColor = .white
-//            } else {
-//                anchoredConstraints.trailing?.isActive = false
-//                anchoredConstraints.leading?.isActive = true
-//                bubbleContainer.backgroundColor = #colorLiteral(red: 0.9146190882, green: 0.914750576, blue: 0.9145902991, alpha: 1)
-//                textView.textColor = .black
-//            }
-//        }
-//    }
-//
-//    var anchoredConstraints: AnchoredConstraints!
-//
-//    override func setupViews() {
-//        super.setupViews()
-//
-//        addSubview(bubbleContainer)
-//        bubbleContainer.layer.cornerRadius = 12
-//
-//
-//        // store the bubble container constraints in local variable
-//        // set the leading and trailing constraint to 20 points
-//        // set the maximum width of bubble container to 250
-//        anchoredConstraints = bubbleContainer.anchor(top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor)
-//        anchoredConstraints.leading?.constant = 20
-//        anchoredConstraints.trailing?.isActive = false
-//        anchoredConstraints.trailing?.constant = -20
-//
-//        bubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
-//
-//        bubbleContainer.addSubview(textView)
-//        textView.fillSuperview(padding: .init(top: 4, left: 12, bottom: 4, right: 12))
-//    }
-//}
+

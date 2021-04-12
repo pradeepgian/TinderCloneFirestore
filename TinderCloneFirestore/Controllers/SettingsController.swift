@@ -111,6 +111,10 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
         fetchCurrentUser()
     }
     
+    deinit {
+        print("Object is destroying itself properly, no retain cycles or any other memory related issues. Memory being reclaimed properly")
+    }
+    
     fileprivate func setupNavigationItems() {
         //This will create large "Settings" title (left aligned)
         navigationItem.title = "Settings"

@@ -16,6 +16,8 @@ class MatchesMessagesListController: LBTAListHeaderController<RecentMessageCell,
     // value will be recent message sent by user
     var recentMessagesDictionary = [String: RecentMessage]()
     
+    var listener: ListenerRegistration?
+    
     let customNavBar = MatchesMessagesViewNavBar()
     
     fileprivate let navBarHeight: CGFloat = 150
@@ -25,16 +27,28 @@ class MatchesMessagesListController: LBTAListHeaderController<RecentMessageCell,
         
         fetchRecentMessages()
         
-        items = []
-        
         setupUI()
+    }
+    
+    // Remove the listener whenever this view is dismissed otherwise it is resulting in retain cycle
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if isMovingFromParent {
+            listener?.remove()
+        }
+    }
+    
+    deinit {
+        print("Object is destroying itself properly, no retain cycles or any other memory related issues. Memory being reclaimed properly")
     }
     
     fileprivate func fetchRecentMessages() {
         guard let  currentUserId = Auth.auth().currentUser?.uid else { return }
         
         // Add a snapshot listener to check if new recent messages have been added to the document
-        Firestore.firestore().collection("matches_messages").document(currentUserId).collection("recent_messages").addSnapshotListener { (querySnapshot, error) in
+        let query = Firestore.firestore().collection("matches_messages").document(currentUserId).collection("recent_messages")
+        listener = query.addSnapshotListener { (querySnapshot, error) in
             
             if let error = error {
                 print("Error while listening for recent messages:", error)
@@ -115,6 +129,14 @@ class MatchesMessagesListController: LBTAListHeaderController<RecentMessageCell,
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let recentMessage = self.items[indexPath.item]
+        let dictionary = ["name": recentMessage.name, "profileImageUrl": recentMessage.profileImageUrl, "uid": recentMessage.uid]
+        let match = Match(dictionary: dictionary)
+        let controller = ChatLogController(match: match)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 

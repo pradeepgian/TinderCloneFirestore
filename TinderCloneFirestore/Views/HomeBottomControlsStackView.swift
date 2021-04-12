@@ -31,16 +31,6 @@ class HomeBottomControlsStackView: UIStackView {
         [refreshButton, dislikeButton, superLikeButton, likeButton, specialButton].forEach { (button) in
             self.addArrangedSubview(button)
         }
-        
-//        let subviews = [#imageLiteral(resourceName: "refresh_circle"), #imageLiteral(resourceName: "dismiss_circle"), #imageLiteral(resourceName: "super_like_circle"), #imageLiteral(resourceName: "like_circle"), #imageLiteral(resourceName: "boost_circle")].map { (image) -> UIView in
-//            let button = UIButton(type: .system)
-//            button.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-//            return button
-//        }
-//
-//        subviews.forEach { (v) in
-//            addArrangedSubview(v)
-//        }
     }
     
     required init(coder: NSCoder) {
