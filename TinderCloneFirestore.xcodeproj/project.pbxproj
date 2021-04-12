@@ -12,6 +12,7 @@
 		8012079225B6058100DD1B66 /* UserDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8012079125B6058100DD1B66 /* UserDetailsController.swift */; };
 		802E352E2620A4CB00939B3D /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E352D2620A4CB00939B3D /* Match.swift */; };
 		802E35312620A4E600939B3D /* MatchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E35302620A4E600939B3D /* MatchCell.swift */; };
+		802E35342620AEFC00939B3D /* MatchesHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E35332620AEFC00939B3D /* MatchesHeader.swift */; };
 		8060A97A26159F3800AA7808 /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97926159F3800AA7808 /* MatchView.swift */; };
 		8060A97D2615A81A00AA7808 /* SendMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97C2615A81A00AA7808 /* SendMessageButton.swift */; };
 		8060A9802615A83900AA7808 /* KeepSwipingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */; };
@@ -52,6 +53,7 @@
 		8012079125B6058100DD1B66 /* UserDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsController.swift; sourceTree = "<group>"; };
 		802E352D2620A4CB00939B3D /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
 		802E35302620A4E600939B3D /* MatchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCell.swift; sourceTree = "<group>"; };
+		802E35332620AEFC00939B3D /* MatchesHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchesHeader.swift; sourceTree = "<group>"; };
 		8060A97926159F3800AA7808 /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
 		8060A97C2615A81A00AA7808 /* SendMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageButton.swift; sourceTree = "<group>"; };
 		8060A97F2615A83900AA7808 /* KeepSwipingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeepSwipingButton.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				8060AA1F261B4D3800AA7808 /* CustomInputAccessoryView.swift */,
 				8060AA22261B4D5900AA7808 /* MessageCell.swift */,
 				802E35302620A4E600939B3D /* MatchCell.swift */,
+				802E35332620AEFC00939B3D /* MatchesHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */,
 				808FD1DD257BD78A00C3A6AC /* AgeRangeCell.swift in Sources */,
 				808FD0EA25666E7500C3A6AC /* AppDelegate.swift in Sources */,
+				802E35342620AEFC00939B3D /* MatchesHeader.swift in Sources */,
 				8060A9802615A83900AA7808 /* KeepSwipingButton.swift in Sources */,
 				8060A97A26159F3800AA7808 /* MatchView.swift in Sources */,
 				8060AA12261B218700AA7808 /* ChatViewNavBar.swift in Sources */,
