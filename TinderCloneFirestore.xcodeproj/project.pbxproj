@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		21C977A0FCAB6F630E75D8D8 /* Pods_TinderCloneFirestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70D5087BF061CB52CA3CEBB /* Pods_TinderCloneFirestore.framework */; };
+		800A735F2624A5D700FF606E /* MatchesHorizontalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800A735E2624A5D700FF606E /* MatchesHorizontalController.swift */; };
 		8012074325B5DB4400DD1B66 /* SwipingPhotosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8012074225B5DB4400DD1B66 /* SwipingPhotosController.swift */; };
 		8012079225B6058100DD1B66 /* UserDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8012079125B6058100DD1B66 /* UserDetailsController.swift */; };
 		802E352E2620A4CB00939B3D /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E352D2620A4CB00939B3D /* Match.swift */; };
@@ -49,6 +50,7 @@
 
 /* Begin PBXFileReference section */
 		28BDEEAEF0753F8B8F8DE53C /* Pods-TinderCloneFirestore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderCloneFirestore.release.xcconfig"; path = "Target Support Files/Pods-TinderCloneFirestore/Pods-TinderCloneFirestore.release.xcconfig"; sourceTree = "<group>"; };
+		800A735E2624A5D700FF606E /* MatchesHorizontalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchesHorizontalController.swift; sourceTree = "<group>"; };
 		8012074225B5DB4400DD1B66 /* SwipingPhotosController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipingPhotosController.swift; sourceTree = "<group>"; };
 		8012079125B6058100DD1B66 /* UserDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsController.swift; sourceTree = "<group>"; };
 		802E352D2620A4CB00939B3D /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				8012079125B6058100DD1B66 /* UserDetailsController.swift */,
 				8060A99D2619E00100AA7808 /* MatchesMessagesListController.swift */,
 				8060AA14261B224F00AA7808 /* ChatLogController.swift */,
+				800A735E2624A5D700FF606E /* MatchesHorizontalController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				8060AA1D261B4CDD00AA7808 /* Message.swift in Sources */,
 				8060AA20261B4D3800AA7808 /* CustomInputAccessoryView.swift in Sources */,
 				808FD112256684F600C3A6AC /* CardView.swift in Sources */,
+				800A735F2624A5D700FF606E /* MatchesHorizontalController.swift in Sources */,
 				8060AA23261B4D5900AA7808 /* MessageCell.swift in Sources */,
 				808FD1882575142500C3A6AC /* RegistrationViewModel.swift in Sources */,
 				808FD0EE25666E7500C3A6AC /* HomeController.swift in Sources */,
